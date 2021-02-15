@@ -20,7 +20,8 @@ console.log(finals2014[0].['Home Team Goals']);
 //(d) Away Team goals for 2014 world cup final
 console.log(finals2014[0].['Away Team Goals']);
 //(e) Winner of 2014 world cup final */
-console.log(finals2014[0].['Win conditions']);
+const winner2014 = finals2014[0].['Win conditions'].split(" ");
+console.log(winner2014[0]);
 
 /* 🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀 Task 2: 🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀 
 Use getFinals to do the following:
@@ -82,45 +83,42 @@ hint: the strings returned need to exactly match the string in step 4.
  */
 
 function getWinnersByYear(fifaData, getYears, getWinners) {
-    /*   const years = getYears();
-      console.log(years);
-      const winners = getWinners();
-      console.log(winners);
-      let winnersByYear = [];
-      const buildMap = (years, winners) => {
-          const map = new Map();
-          for (let year in years) {
-              map.set(years[year], winners[year]);
-          }
-          return map;
-      }
-      let winnerMap = buildMap(years, winners);
-      console.log(buildMap(years, winners));
-
-      winnerMap.forEach((year) => {
-          winnersByYear.push(`In ${this[0]}, ${year} won the world cup!`);
-      });
-      return winnersByYear; */
+    const years = getYears();
+    const winners = getWinners();
+    const result = {};
+    years.forEach((year, i) => result[year] = winners[i]);
+    const winnersByYear = [];
+    for (const [year, winner] of Object.entries(result)) {
+        winnersByYear.push(`In ${year}, ${winner} won the world cup!`);
+    }
+    return winnersByYear;
 };
 
-/* 🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀 Task 6: 🚀🚀🚀🚀🚀🚀🚀🚀🚀
+/* 🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀 Task 6: 🚀🚀🚀🚀🚀🚀🚀
 Use the higher order function getAverageGoals to do the following: 
  1. Receive the callback function getFinals from task 2 ensure you pass in the data as an argument
  2. Return the the average number of the total home team goals and away team goals scored per match and round to the second decimal place. 
  
- (Hint: use .reduce and do this in 2 steps) 
+ (Hint: use .reduce and do this in 2 steps)
  
  Example of invocation: getAverageGoals(getFinals(fifaData));
 */
 
-function getAverageGoals(fifaData, getFinals) {
-    const finals = getFinals(fifaData);
-    const averageHomeGoals = finals.reduce((total, gameGoals) => {
+function getAverageGoals(getFinals) {
+    const homeGoals = getFinals.reduce((total, gameGoals) => {
         let sum = total + gameGoals.['Home Team Goals'];
-        console.log(sum, total, gameGoals);
         return sum;
     }, 0);
-    const average = averageHomeGoals / getFinals.length;
+
+    const awayGoals = getFinals.reduce((total, gameGoals) => {
+        let sum = total + gameGoals.['Away Team Goals'];
+        return sum;
+    }, 0);
+
+    let goals = homeGoals + awayGoals;
+
+    const averageGoals = goals / getFinals.length;
+    return averageGoals.toFixed(2);
 }
 
 /// 🥅 STRETCH 🥅 ///
@@ -131,7 +129,7 @@ Create a function called `getCountryWins` that takes the parameters `data` and `
 Hint: Investigate your data to find "team initials"!
 Hint: use `.reduce` */
 
-function getCountryWins(data, ['Team initials']) {
+function getCountryWins() {
 
     /* code here */
 
